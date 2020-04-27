@@ -1,0 +1,35 @@
+#!/bin/bash
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+RUN_DIR=/var/vcap/sys/run/amazon-cloudwatch-agent
+LOG_DIR=/var/vcap/sys/log/amazon-cloudwatch-agent
+PIDFILE=${RUN_DIR}/pid
+
+case $1 in
+
+  start)
+    if [[ ! -f /usr/bin/amazon-cloudwatch-agent ]]; then
+      (
+        flock -x 200
+        dpkg -i /var/vcap/packages/amazon-cloudwatch-agent/amazon-cloudwatch-agent.deb
+      ) 200>/var/vcap/data/dpkg.lock 
+    fi
+  
+    /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/var/vcap/jobs/amazon-cloudwatch-agent/conf/cloudwatch-config.json -s > ${LOG_DIR}/amazon-cloudwatch-agent.log 2>&1 & 
+
+    ps -ef | grep "amazon-cloudwatch-agent" | grep -v "grep" | tr -s ' ' | cut -d ' ' -f2 > ${PIDFILE}
+    ;;
+
+  stop)
+    kill -9 `cat ${PIDFILE}`
+    rm -f ${PIDFILE}
+    ;;
+  *)
+    echo "Usage: amazon-cloudwatch-agent_ctl {start|stop}"
+
+    ;;
+
+esac
+exit 0

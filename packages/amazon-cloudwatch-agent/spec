@@ -1,0 +1,7 @@
+---
+name: amazon-cloudwatch-agent
+
+dependencies: []
+
+files:
+  - amazon-cloudwatch-agent.deb

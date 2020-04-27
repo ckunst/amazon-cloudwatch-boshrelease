@@ -1,0 +1,11 @@
+releases:
+  - name: amazon-cloudwatch-boshrelease
+    version: 1
+addons:
+  - name: amazon-cloudwatch-agent-xenial
+    jobs:
+      - name: amazon-cloudwatch-agent
+        release: amazon-cloudwatch-boshrelease
+    include:
+      stemcell:
+        - os: ubuntu-xenial

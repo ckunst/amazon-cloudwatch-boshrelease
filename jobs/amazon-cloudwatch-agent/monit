@@ -1,0 +1,5 @@
+check process amazon-cloudwatch-agent
+  with pidfile /var/vcap/sys/run/amazon-cloudwatch-agent/pid
+  start program "/var/vcap/jobs/amazon-cloudwatch-agent/bin/ctl start"
+  stop program "/var/vcap/jobs/amazon-cloudwatch-agent/bin/ctl stop"
+  group vcap

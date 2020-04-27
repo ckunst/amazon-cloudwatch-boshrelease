@@ -1,0 +1,11 @@
+---
+name: amazon-cloudwatch-agent
+
+templates:
+  bin/ctl.erb: bin/ctl
+  conf/cloudwatch-config.json: conf/cloudwatch-config.json
+
+packages:
+  - amazon-cloudwatch-agent
+
+properties: {}
